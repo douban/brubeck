@@ -48,8 +48,7 @@ Brubeck has been seen to work under FreeBSD and OpenBSD, but this is not support
 Brubeck supports most of the metric types from statsd and many other implementations.
 
 - `g` - Gauges
-- `c` - Meters
-- `C` - Counters
+- `c` - Counters
 - `h` - Histograms
 - `ms` - Timers (in milliseconds)
 

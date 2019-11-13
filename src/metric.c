@@ -71,45 +71,9 @@ gauge__sample(struct brubeck_metric *metric, brubeck_sample_cb sample, void *opa
 
 
 /*********************************************
- * Meter
- *
- * ALLOC: mt + 4
- *********************************************/
-static void
-meter__record(struct brubeck_metric *metric, value_t value, value_t sample_freq, uint8_t modifiers)
-{
-	/* upsample */
-	value *= sample_freq;
-
-	pthread_spin_lock(&metric->lock);
-	{
-		metric->as.meter.value += value;
-		metric->state= BRUBECK_STATE_ACTIVE;
-	}
-	pthread_spin_unlock(&metric->lock);
-}
-
-static void
-meter__sample(struct brubeck_metric *metric, brubeck_sample_cb sample, void *opaque)
-{
-	value_t value;
-
-	pthread_spin_lock(&metric->lock);
-	{
-		value = metric->as.meter.value;
-		metric->as.meter.value = 0.0;
-		metric->state = BRUBECK_STATE_INACTIVE;
-	}
-	pthread_spin_unlock(&metric->lock);
-
-	sample(metric->type, metric->key, value, opaque);
-}
-
-
-/*********************************************
  * Counter
  *
- * ALLOC: mt + 4 + 4 + 4
+ * ALLOC: mt + 4
  *********************************************/
 static void
 counter__record(struct brubeck_metric *metric, value_t value, value_t sample_freq, uint8_t modifiers)
@@ -119,15 +83,7 @@ counter__record(struct brubeck_metric *metric, value_t value, value_t sample_fre
 
 	pthread_spin_lock(&metric->lock);
 	{
-		if (metric->as.counter.previous > 0.0) {
-			value_t diff = (value >= metric->as.counter.previous) ?
-				(value - metric->as.counter.previous) :
-				(value);
-
-			metric->as.counter.value += diff;
-		}
-
-		metric->as.counter.previous = value;
+		metric->as.counter.value += value;
 		metric->state= BRUBECK_STATE_ACTIVE;
 	}
 	pthread_spin_unlock(&metric->lock);
@@ -235,12 +191,6 @@ static struct brubeck_metric__proto {
 	{
 		&gauge__record,
 		&gauge__sample
-	},
-
-	/* Meter */
-	{
-		&meter__record,
-		&meter__sample
 	},
 
 	/* Counter */

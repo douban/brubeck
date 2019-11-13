@@ -65,7 +65,7 @@ static void plaintext_each(
 		*ptr++ = '.';
 	}
 
-	if ((type == BRUBECK_MT_COUNTER || type == BRUBECK_MT_METER) && carbon->namespacing.counter) {
+	if (type == BRUBECK_MT_COUNTER && carbon->namespacing.counter) {
 		memcpy(ptr, carbon->namespacing.counter, carbon->namespacing.counter_len);
 		ptr += carbon->namespacing.counter_len;
 		*ptr++ = '.';
@@ -145,7 +145,7 @@ static void pickle1_push(
 		namespaced_key_len += carbon->namespacing.global_len + 1;
 	}
 
-	if ((type == BRUBECK_MT_COUNTER || type == BRUBECK_MT_METER) && carbon->namespacing.counter) {
+	if (type == BRUBECK_MT_COUNTER && carbon->namespacing.counter) {
 		type_namespace = carbon->namespacing.counter;
 		type_namespace_len = carbon->namespacing.counter_len;
 		// the counter namespace plus the "." character

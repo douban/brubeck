@@ -194,8 +194,7 @@ int brubeck_statsd_msg_parse(struct brubeck_statsd_msg *msg, char *buffer, char 
 	{
 		switch (*buffer) {
 			case 'g': msg->type = BRUBECK_MT_GAUGE; break;
-			case 'c': msg->type = BRUBECK_MT_METER; break;
-			case 'C': msg->type = BRUBECK_MT_COUNTER; break;
+			case 'c': msg->type = BRUBECK_MT_COUNTER; break;
 			case 'h': msg->type = BRUBECK_MT_HISTO; break;
 			case 'm':
 					  ++buffer;

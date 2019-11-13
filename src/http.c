@@ -74,7 +74,7 @@ static struct MHD_Response *
 send_metric(struct brubeck_server *server, const char *url)
 {
 	static const char *metric_types[] = {
-		"gauge", "meter", "counter", "histogram", "timer", "internal"
+		"gauge", "counter", "histogram", "timer", "internal"
 	};
 	static const char *metric_status[] = {
 		"inactive", "active"
