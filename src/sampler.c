@@ -12,13 +12,18 @@ brubeck_sampler_init_inet(struct brubeck_sampler *sampler, struct brubeck_server
 
 int brubeck_sampler_socket(struct brubeck_sampler *sampler, int multisock)
 {
+	// TODO:(everpcpc) make it configurable
+	int recvBufferSize = 67108864;
 	int sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
 
 	assert(sock >= 0);
 
 	sock_enlarge_in(sock);
 	sock_setreuse(sock, 1);
-	
+
+	if (setsockopt(sock, SOL_SOCKET, SO_RCVBUF, (char *) &recvBufferSize, sizeof(recvBufferSize)))
+		die("set recvBufferSize failed");
+
 	if (multisock)
 		sock_setreuse_port(sock, 1);
 
