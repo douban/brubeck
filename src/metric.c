@@ -107,7 +107,8 @@ counter__sample(struct brubeck_metric *metric, brubeck_sample_cb sample, void *o
 	pthread_spin_unlock(&metric->lock);
 
 	WITH_SUFFIX(".rate") {
-		sample(metric->type, key, value, opaque);
+		struct brubeck_backend *backend = opaque;
+		sample(metric->type, key, value / (double)backend->sample_freq, opaque);
 	}
 }
 
