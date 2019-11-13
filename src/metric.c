@@ -215,25 +215,14 @@ histogram__sample(struct brubeck_metric *metric, brubeck_sample_cb sample, void 
 		sample(metric->type, key, hsample.median, opaque);
 	}
 
-	WITH_SUFFIX(".percentile.75") {
-		sample(metric->type, key, hsample.percentile[PC_75], opaque);
-	}
-
-	WITH_SUFFIX(".percentile.95") {
-		sample(metric->type, key, hsample.percentile[PC_95], opaque);
-	}
-
-	WITH_SUFFIX(".percentile.98") {
-		sample(metric->type, key, hsample.percentile[PC_98], opaque);
+	WITH_SUFFIX(".percentile.90") {
+		sample(metric->type, key, hsample.percentile[PC_90], opaque);
 	}
 
 	WITH_SUFFIX(".percentile.99") {
 		sample(metric->type, key, hsample.percentile[PC_99], opaque);
 	}
 
-	WITH_SUFFIX(".percentile.999") {
-		sample(metric->type, key, hsample.percentile[PC_999], opaque);
-	}
 }
 
 /********************************************************/
