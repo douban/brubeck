@@ -78,8 +78,11 @@ void brubeck_histo_sample(
 	sample->median = histo_percentile(histo, 0.5f);
 	sample->count = histo->count;
 
-	sample->percentile[PC_90] = histo_percentile(histo, 0.90f);
-	sample->percentile[PC_99] = histo_percentile(histo, 0.99f);
+	sample->lower[PC_90] = histo_percentile(histo, 0.10f);
+	sample->lower[PC_99] = histo_percentile(histo, 0.01f);
+
+	sample->upper[PC_90] = histo_percentile(histo, 0.90f);
+	sample->upper[PC_99] = histo_percentile(histo, 0.99f);
 
 	/* empty the histogram */
 	histo->size = 0;

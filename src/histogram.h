@@ -15,7 +15,8 @@ struct brubeck_histo_sample {
 	value_t median;
 	value_t count;
 
-	value_t percentile[2];
+	value_t lower[2];
+	value_t upper[2];
 };
 
 enum { PC_90, PC_99 };
