@@ -159,11 +159,11 @@ histogram__sample(struct brubeck_metric *metric, brubeck_sample_cb sample, void 
 	}
 
 	WITH_SUFFIX(".lower") {
-		sample(metric->type, key, hsample.min, opaque);
+		sample(metric->type, key, hsample.lower, opaque);
 	}
 
 	WITH_SUFFIX(".upper") {
-		sample(metric->type, key, hsample.max, opaque);
+		sample(metric->type, key, hsample.upper, opaque);
 	}
 
 	WITH_SUFFIX(".sum") {
@@ -179,19 +179,19 @@ histogram__sample(struct brubeck_metric *metric, brubeck_sample_cb sample, void 
 	}
 
 	WITH_SUFFIX(".mean_90") {
-		sample(metric->type, key, hsample.mean[PC_90], opaque);
+		sample(metric->type, key, hsample.mean_pct[PC_90], opaque);
 	}
 
 	WITH_SUFFIX(".mean_99") {
-		sample(metric->type, key, hsample.mean[PC_99], opaque);
+		sample(metric->type, key, hsample.mean_pct[PC_99], opaque);
 	}
 
 	 WITH_SUFFIX(".upper_90") {
-		sample(metric->type, key, hsample.upper[PC_90], opaque);
+		sample(metric->type, key, hsample.upper_pct[PC_90], opaque);
 	 }
 
 	WITH_SUFFIX(".upper_99") {
-		sample(metric->type, key, hsample.upper[PC_99], opaque);
+		sample(metric->type, key, hsample.upper_pct[PC_99], opaque);
 	}
 
 }

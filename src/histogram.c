@@ -72,17 +72,17 @@ void brubeck_histo_sample(
 	histo_sort(histo);
 
 	sample->sum = histo_sum(histo);
-	sample->min = histo->values[0];
-	sample->max = histo->values[histo->size - 1];
+	sample->lower = histo->values[0];
+	sample->upper = histo->values[histo->size - 1];
 	sample->mean = sample->sum / histo->size;
 	sample->median = histo_percentile(histo, 0.5f);
 	sample->count = histo->count;
 
-	sample->mean[PC_90] = histo_percentile(histo, 0.90f) / histo->size / 0.90f;
-	sample->mean[PC_99] = histo_percentile(histo, 0.99f) / histo->size / 0.99f;
+	sample->mean_pct[PC_90] = histo_percentile(histo, 0.90f) / histo->size / 0.90f;
+	sample->mean_pct[PC_99] = histo_percentile(histo, 0.99f) / histo->size / 0.99f;
 
-	sample->upper[PC_90] = histo_percentile(histo, 0.90f);
-	sample->upper[PC_99] = histo_percentile(histo, 0.99f);
+	sample->upper_pct[PC_90] = histo_percentile(histo, 0.90f);
+	sample->upper_pct[PC_99] = histo_percentile(histo, 0.99f);
 
 	/* empty the histogram */
 	histo->size = 0;

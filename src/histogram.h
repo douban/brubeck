@@ -9,14 +9,14 @@ struct brubeck_histo {
 
 struct brubeck_histo_sample {
 	value_t sum;
-	value_t min;
-	value_t max;
+	value_t lower;
+	value_t upper;
 	value_t mean;
 	value_t median;
 	value_t count;
 
-	value_t mean[2];
-	value_t upper[2];
+	value_t mean_pct[2];
+	value_t upper_pct[2];
 };
 
 enum { PC_90, PC_99 };
