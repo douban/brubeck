@@ -27,7 +27,7 @@ char *find_substr(const char *s, const char *find, size_t slen)
 
 			if (len > slen)
 				return NULL;
-				
+
 		} while (strncmp(s, find, len) != 0);
 		s--;
 	}
@@ -112,7 +112,7 @@ void url_to_inaddr2(struct sockaddr_in *addr, const char *url, int port)
 
 #define FLOAT_PRECISION 4
 
-int brubeck_itoa(char *ptr, uint32_t number)
+int brubeck_itoa(char *ptr, uint64_t number)
 {
 	char *origin = ptr;
 	int size;
@@ -134,7 +134,7 @@ int brubeck_itoa(char *ptr, uint32_t number)
 	return size;
 }
 
-int brubeck_ftoa(char *outbuf, float f)
+int brubeck_ftoa(char *outbuf, double f)
 {
 	uint64_t mantissa, int_part, frac_part;
 	int safe_shift;
@@ -143,15 +143,15 @@ int brubeck_ftoa(char *outbuf, float f)
 	char *p;
 
 	union {
-		int L;
-		float F;
+		int64_t L;
+		double F;
 	} x;
 
 	x.F = f;
 	p = outbuf;
 
-	exp2 = (unsigned char)(x.L >> 23) - 127;
-	mantissa = (x.L & 0xFFFFFF) | 0x800000;
+	exp2 = (unsigned short)((x.L >> 52) & 0x7FF) - 1023;
+	mantissa = (x.L & 0xFFFFFFFFFFFFFULL) | 0x10000000000000;
 	frac_part = 0;
 	int_part = 0;
 
@@ -159,23 +159,24 @@ int brubeck_ftoa(char *outbuf, float f)
 		*p++ = '-';
 	}
 
-	if (exp2 < -36) {
+	// NOTE: FLOAT_PRECISION * 3
+	if (unlikely(exp2 < -12)) {
 		*p++ = '0';
 		goto END;
 	}
 
 	safe_shift = -(exp2 + 1);
-	safe_mask = 0xFFFFFFFFFFFFFFFFULL >>(64 - 24 - safe_shift);
+	safe_mask = 0xFFFFFFFFFFFFFFFFULL >> (64 - 53 - safe_shift);
 
-	if (exp2 >= 64) {
-		int_part = ULONG_MAX;
-	} else if (exp2 >= 23) {
-		int_part = mantissa << (exp2 - 23);
+	if (exp2 > 64) {
+		int_part = ULLONG_MAX;
+	} else if (exp2 >= 52) {
+		int_part = mantissa << (exp2 - 52);
 	} else if (exp2 >= 0) {
-		int_part = mantissa >> (23 - exp2);
-		frac_part = (mantissa) & safe_mask;
+		int_part = mantissa >> (52 - exp2);
+		frac_part = mantissa & safe_mask;
 	} else /* if (exp2 < 0) */ {
-		frac_part = (mantissa & 0xFFFFFF);
+		frac_part = mantissa;
 	}
 
 	if (int_part == 0) {
@@ -183,15 +184,15 @@ int brubeck_ftoa(char *outbuf, float f)
 	} else {
 		p += brubeck_itoa(p, int_part);
 	}
- 
+
 	if (frac_part != 0) {
 		int m;
 
 		*p++ = '.';
 
 		for (m = 0; m < FLOAT_PRECISION; m++) {
-			frac_part = (frac_part << 3) + (frac_part << 1); 
-			*p++ = (frac_part >> (24 + safe_shift)) + '0';
+			frac_part = (frac_part << 3) + (frac_part << 1);
+			*p++ = (frac_part >> (53 + safe_shift)) + '0';
 			frac_part &= safe_mask;
 		}
 

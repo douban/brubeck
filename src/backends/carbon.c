@@ -21,7 +21,7 @@ static int carbon_connect(void *backend)
 		int rc = connect(self->out_sock,
 				(struct sockaddr *)&self->out_sockaddr,
 				sizeof(self->out_sockaddr));
-		
+
 		if (rc == 0) {
 			log_splunk("backend=carbon event=connected");
 			sock_enlarge_out(self->out_sock);
@@ -223,7 +223,7 @@ static void pickle1_flush(void *backend)
 
 	uint32_t *buf_lead;
 	ssize_t wr;
-	
+
 	if (buf->pt == 1 || !carbon_is_connected(carbon))
 		return;
 

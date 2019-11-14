@@ -1,4 +1,5 @@
 brubeck
+brubeck_test
 *.o
 *.swp
 *~

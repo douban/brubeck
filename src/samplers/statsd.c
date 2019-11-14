@@ -93,7 +93,7 @@ static void statsd_run_recvmsg(struct brubeck_statsd *statsd, int sock)
 }
 
 static inline char *
-parse_float(char *buffer, value_t *result, uint8_t *mods)
+parse_value(char *buffer, value_t *result, uint8_t *mods)
 {
 	int negative = 0;
 	char *start = buffer;
@@ -114,7 +114,7 @@ parse_float(char *buffer, value_t *result, uint8_t *mods)
 	}
 
 	if (*buffer == '.') {
-		double f = 0.0;
+		value_t f = 0.0;
 		int n = 0;
 		++buffer;
 
@@ -176,7 +176,7 @@ int brubeck_statsd_msg_parse(struct brubeck_statsd_msg *msg, char *buffer, char 
 	 */
 	{
 		msg->modifiers = 0;
-		buffer = parse_float(buffer, &msg->value, &msg->modifiers);
+		buffer = parse_value(buffer, &msg->value, &msg->modifiers);
 
 		if (*buffer != '|')
 			return -1;
@@ -219,10 +219,10 @@ int brubeck_statsd_msg_parse(struct brubeck_statsd_msg *msg, char *buffer, char 
 	 */
 	{
 		if (buffer[0] == '|' && buffer[1] == '@') {
-			double sample_rate;
+			value_t sample_rate;
 			uint8_t dummy;
 
-			buffer = parse_float(buffer + 2, &sample_rate, &dummy);
+			buffer = parse_value(buffer + 2, &sample_rate, &dummy);
 			if (sample_rate <= 0.0 || sample_rate > 1.0)
 				return -1;
 
@@ -234,7 +234,7 @@ int brubeck_statsd_msg_parse(struct brubeck_statsd_msg *msg, char *buffer, char 
 
 		if (buffer[0] == '\0' || (buffer[0] == '\n' && buffer[1] == '\0'))
 			return 0;
-			
+
 		return -1;
 	}
 }
