@@ -15,7 +15,7 @@ struct brubeck_histo_sample {
 	value_t median;
 	value_t count;
 
-	value_t lower[2];
+	value_t mean[2];
 	value_t upper[2];
 };
 
