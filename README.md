@@ -1,5 +1,7 @@
 # Brubeck
 
+[![Build Status](https://travis-ci.org/douban/brubeck.svg?branch=master)](https://travis-ci.org/douban/brubeck)
+
 Brubeck is a [statsd](https://github.com/etsy/statsd)-compatible stats
 aggregator written in C.
 
