@@ -14,7 +14,7 @@ static void *thread_histo(void *ptr)
 {
 	struct histo_test *t = ptr;
 	size_t i;
-	
+
 	for (i = 0; i < ITERS; ++i) {
 		if (rand() % 2 == 0) {
 			struct brubeck_histo_sample hsample;
@@ -57,9 +57,9 @@ void test_histogram__single_element(void)
 
 	brubeck_histo_sample(&sample, &h);
 
-	sput_fail_unless(sample.min == 42.0, "sample.min");
-	sput_fail_unless(sample.max == 42.0, "sample.max");
-	sput_fail_unless(sample.percentile[3] == 42.0, "sample.percentile[3]");
+	sput_fail_unless(sample.lower == 42.0, "sample.lower");
+	sput_fail_unless(sample.upper == 42.0, "sample.upper");
+	sput_fail_unless(sample.upper_pct[1] == 42.0, "sample.upper_99");
 	sput_fail_unless(sample.mean == 42.0, "sample.mean");
 	sput_fail_unless(sample.count == 1, "sample.count");
 	sput_fail_unless(sample.sum == 42.0, "sample.sum");
@@ -78,8 +78,8 @@ void test_histogram__large_range(void)
 
 	brubeck_histo_sample(&sample, &h);
 
-	sput_fail_unless(sample.min == 42.0, "sample.min");
-	sput_fail_unless(sample.max == 1.3e12, "sample.max");
+	sput_fail_unless(sample.lower == 42.0, "sample.lower");
+	sput_fail_unless(sample.upper == 1.3e12, "sample.upper");
 	sput_fail_unless(sample.median == 42.0, "sample.median");
 }
 
@@ -100,9 +100,9 @@ void test_histogram__multisamples(void)
 
 		brubeck_histo_sample(&sample, &h);
 
-		sput_fail_unless(sample.min == 1.0, "sample.min");
-		sput_fail_unless(sample.max == 128.0, "sample.max");
-		sput_fail_unless(sample.percentile[3] == 127.0, "sample.percentile[3]");
+		sput_fail_unless(sample.lower == 1.0, "sample.lower");
+		sput_fail_unless(sample.upper == 128.0, "sample.upper");
+		sput_fail_unless(sample.upper_pct[1] == 127.0, "sample.upper_99");
 		sput_fail_unless(sample.mean == 64.5, "sample.mean");
 		sput_fail_unless(sample.count == 128, "sample.count");
 		sput_fail_unless(sample.sum == 8256.0, "sample.sum");
@@ -125,9 +125,9 @@ void test_histogram__with_sample_rate(void)
 
 	brubeck_histo_sample(&sample, &h);
 
-	sput_fail_unless(sample.min == 1.0, "sample.min");
-	sput_fail_unless(sample.max == 128.0, "sample.max");
-	sput_fail_unless(sample.percentile[3] == 127.0, "sample.percentile[3]");
+	sput_fail_unless(sample.lower == 1.0, "sample.lower");
+	sput_fail_unless(sample.upper == 128.0, "sample.max");
+	sput_fail_unless(sample.upper_pct[1] == 127.0, "sample.upper_99");
 	sput_fail_unless(sample.mean == 64.5, "sample.mean");
 	sput_fail_unless(sample.count == 1280, "sample.count");
 	sput_fail_unless(sample.sum == 8256.0, "sample.sum");
@@ -151,8 +151,8 @@ void test_histogram__capacity(void)
 
 	brubeck_histo_sample(&sample, &h);
 
-	sput_fail_unless(sample.min == 1.0, "sample.min");
-	sput_fail_unless(sample.max == (double)HISTO_CAP, "sample.max");
+	sput_fail_unless(sample.lower == 1.0, "sample.lower");
+	sput_fail_unless(sample.upper == (double)HISTO_CAP, "sample.upper");
 	sput_fail_unless(sample.count == (HISTO_CAP + 500), "sample.count");
 
 	for (j = 0; j < HISTO_CAP + 500; ++j)
@@ -163,8 +163,8 @@ void test_histogram__capacity(void)
 
 	brubeck_histo_sample(&sample, &h);
 
-	sput_fail_unless(sample.min == 1.0, "sample.min");
-	sput_fail_unless(sample.max == (double)HISTO_CAP, "sample.max");
+	sput_fail_unless(sample.lower == 1.0, "sample.lower");
+	sput_fail_unless(sample.upper == (double)HISTO_CAP, "sample.upper");
 	sput_fail_unless(sample.count == ((HISTO_CAP + 500) * 10), "sample.count");
 }
 
