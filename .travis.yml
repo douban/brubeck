@@ -1,0 +1,10 @@
+version: ~> 1.0
+language: c
+addons:
+  apt:
+    packages:
+    - libjansson-dev
+    - libmicrohttpd-dev
+script:
+  - script/bootstrap
+  - make test
