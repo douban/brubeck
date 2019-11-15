@@ -51,9 +51,9 @@ static void statsd_run_recvmmsg(struct brubeck_statsd *statsd, int sock)
 		}
 
 		/* store stats */
-		brubeck_atomic_add(&statsd->sampler.inflow, SIM_PACKETS);
+		brubeck_atomic_add(&statsd->sampler.inflow, res);
 
-		for (i = 0; i < SIM_PACKETS; ++i) {
+		for (i = 0; i < res; ++i) {
 			char *buf = msgs[i].msg_hdr.msg_iov->iov_base;
 			char *end = buf + msgs[i].msg_len;
 			brubeck_statsd_packet_parse(server, buf, end);
@@ -252,7 +252,7 @@ void brubeck_statsd_packet_parse(struct brubeck_server *server, char *buffer, ch
 		if (brubeck_statsd_msg_parse(&msg, buffer, stat_end) < 0) {
 			brubeck_stats_inc(server, errors);
 			// FIXME:(everpcpc)
-			// log_splunk("sampler=statsd event=packet_drop metric=%s", buffer);
+			log_splunk("sampler=statsd event=packet_drop metric=%s", buffer);
 		} else {
 			brubeck_stats_inc(server, metrics);
 			metric = brubeck_metric_find(server, msg.key, msg.key_len, msg.type);
