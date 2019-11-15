@@ -61,6 +61,7 @@ void test_histogram__single_element(void)
 	sput_fail_unless(sample.upper == 42.0, "sample.upper");
 	sput_fail_unless(sample.upper_pct[1] == 42.0, "sample.upper_99");
 	sput_fail_unless(sample.mean == 42.0, "sample.mean");
+	sput_fail_unless(sample.mean_pct[0] == 42.0, "sample.mean_90");
 	sput_fail_unless(sample.count == 1, "sample.count");
 	sput_fail_unless(sample.sum == 42.0, "sample.sum");
 }
