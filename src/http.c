@@ -38,7 +38,7 @@ flow_stats(struct brubeck_server *server)
 	jsonr = json_dumps(top_metrics_j, JSON_INDENT(4) | JSON_PRESERVE_ORDER);
 	json_decref(top_metrics_j);
 
-	return MHD_create_response_from_data(strlen(jsonr), jsonr, 1, 0);
+	return MHD_create_response_from_buffer(strlen(jsonr), jsonr, 1);
 }
 
 #else
@@ -64,8 +64,8 @@ expire_metric(struct brubeck_server *server, const char *url)
 
 	if (metric) {
 		metric->state = BRUBECK_STATE_INACTIVE;
-		return MHD_create_response_from_data(
-				0, "", 0, 0);
+		return MHD_create_response_from_buffer(
+				0, "", 0);
 	}
 	return NULL;
 }
@@ -97,8 +97,8 @@ send_metric(struct brubeck_server *server, const char *url)
 
 		char *jsonr = json_dumps(mj, JSON_INDENT(4) | JSON_PRESERVE_ORDER);
 		json_decref(mj);
-		return MHD_create_response_from_data(
-				strlen(jsonr), jsonr, 1, 0);
+		return MHD_create_response_from_buffer(
+				strlen(jsonr), jsonr, 1);
 	}
 
 	return NULL;
@@ -110,7 +110,7 @@ send_stats(struct brubeck_server *brubeck)
 	char *jsonr;
 	json_t *stats, *secure, *backends, *samplers;
 	int i;
-	
+
 	backends = json_array();
 
 	for (i = 0; i < brubeck->active_backends; ++i) {
@@ -174,8 +174,8 @@ send_stats(struct brubeck_server *brubeck)
 
 	jsonr = json_dumps(stats, JSON_INDENT(4) | JSON_PRESERVE_ORDER);
 	json_decref(stats);
-	return MHD_create_response_from_data(
-		strlen(jsonr), jsonr, 1, 0);
+	return MHD_create_response_from_buffer(
+		strlen(jsonr), jsonr, 1);
 }
 
 static struct MHD_Response *
@@ -207,8 +207,8 @@ send_ping(struct brubeck_server *brubeck)
 
 	jsonr = json_dumps(stats, JSON_INDENT(4) | JSON_PRESERVE_ORDER);
 	json_decref(stats);
-	return MHD_create_response_from_data(
-		strlen(jsonr), jsonr, 1, 0);
+	return MHD_create_response_from_buffer(
+		strlen(jsonr), jsonr, 1);
 }
 
 static int
@@ -241,8 +241,8 @@ handle_request(void *cls, struct MHD_Connection *connection,
 
 	if (!response) {
 		static const char *NOT_FOUND = "404 not found";
-		response = MHD_create_response_from_data(
-			strlen(NOT_FOUND), (void *)NOT_FOUND, 0, 0);
+		response = MHD_create_response_from_buffer(
+			strlen(NOT_FOUND), (void *)NOT_FOUND, 0);
 		MHD_add_response_header(response, "Connection", "close");
 		ret = MHD_queue_response(connection, 404, response);
 	} else {
