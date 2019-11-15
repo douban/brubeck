@@ -108,7 +108,7 @@ static void *statsd_secure__thread(void *_in)
 
 	log_splunk("sampler=statsd-secure event=worker_online");
 
-	ctx = EVP_CIPHER_CTX_new();
+	ctx = HMAC_CTX_new();
 	HMAC_Init_ex(ctx, statsd->hmac_key, strlen(statsd->hmac_key), SHA_FUNCTION(), NULL);
 
 	for (;;) {
@@ -149,7 +149,7 @@ static void *statsd_secure__thread(void *_in)
 		brubeck_statsd_packet_parse(server, buffer + MIN_PACKET_SIZE, buffer + res);
 	}
 
-	HMAC_CTX_cleanup(ctx);
+	HMAC_CTX_free(ctx);
 	return NULL;
 }
 
