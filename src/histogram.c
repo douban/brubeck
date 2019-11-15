@@ -45,6 +45,16 @@ static inline value_t histo_sum(struct brubeck_histo *histo)
 	return sum;
 }
 
+static inline value_t histo_percentile_mean(struct brubeck_histo *histo, float rank)
+{
+	size_t i;
+	value_t sum = 0.0;
+	size_t irank = floor((rank * histo->size) + 0.5f);
+	for (i = 0; i < irank; ++i)
+		sum += histo->values[i];
+	return sum/irank;
+}
+
 static int value_cmp(const void *a, const void *b)
 {
 	const value_t va = *(const value_t *)a, vb = *(const value_t *)b;
@@ -78,8 +88,8 @@ void brubeck_histo_sample(
 	sample->median = histo_percentile(histo, 0.5f);
 	sample->count = histo->count;
 
-	sample->mean_pct[PC_90] = histo_percentile(histo, 0.90f) / histo->size / 0.90f;
-	sample->mean_pct[PC_99] = histo_percentile(histo, 0.99f) / histo->size / 0.99f;
+	sample->mean_pct[PC_90] = histo_percentile_mean(histo, 0.9f);
+	sample->mean_pct[PC_99] = histo_percentile_mean(histo, 0.99f);
 
 	sample->upper_pct[PC_90] = histo_percentile(histo, 0.90f);
 	sample->upper_pct[PC_99] = histo_percentile(histo, 0.99f);
