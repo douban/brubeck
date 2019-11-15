@@ -34,7 +34,7 @@ Brubeck has the following dependencies:
 
 - Jansson (`libjansson-dev` on Debian) to load the configuration (version 2.5+ is required)
 
-- OpenSSL (`libcrypto`) if you're building StatsD-Secure support
+- OpenSSL (`libcrypto`) if you're building StatsD-Secure support (version 1.1+ is required)
 
 - libmicrohttpd (`libmicrohttpd-dev`) to have an internal HTTP stats endpoint. Build with `BRUBECK_NO_HTTP` to disable this.
 

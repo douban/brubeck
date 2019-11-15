@@ -1,8 +1,10 @@
 version: ~> 1.0
 language: c
+dist: bionic
 addons:
   apt:
     packages:
+    - libssl-dev
     - libjansson-dev
     - libmicrohttpd-dev
 script:
