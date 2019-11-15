@@ -1,6 +1,6 @@
 #include <sys/signalfd.h>
-#include <sys/signal.h>
 #include <sys/timerfd.h>
+#include <signal.h>
 #include <poll.h>
 
 #include "brubeck.h"
