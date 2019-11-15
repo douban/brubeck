@@ -103,6 +103,7 @@ void test_histogram__multisamples(void)
 		sput_fail_unless(sample.lower == 1.0, "sample.lower");
 		sput_fail_unless(sample.upper == 128.0, "sample.upper");
 		sput_fail_unless(sample.upper_pct[1] == 127.0, "sample.upper_99");
+		sput_fail_unless(sample.sum == 58.0, "sample.mean_90");
 		sput_fail_unless(sample.mean == 64.5, "sample.mean");
 		sput_fail_unless(sample.count == 128, "sample.count");
 		sput_fail_unless(sample.sum == 8256.0, "sample.sum");
@@ -128,6 +129,7 @@ void test_histogram__with_sample_rate(void)
 	sput_fail_unless(sample.lower == 1.0, "sample.lower");
 	sput_fail_unless(sample.upper == 128.0, "sample.max");
 	sput_fail_unless(sample.upper_pct[1] == 127.0, "sample.upper_99");
+	sput_fail_unless(sample.sum == 58.0, "sample.mean_90");
 	sput_fail_unless(sample.mean == 64.5, "sample.mean");
 	sput_fail_unless(sample.count == 1280, "sample.count");
 	sput_fail_unless(sample.sum == 8256.0, "sample.sum");
