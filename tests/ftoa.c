@@ -1,12 +1,10 @@
 #include "sput.h"
 #include "brubeck.h"
-#include "stdio.h"
 
 static void check_eq(double f, const char *str)
 {
 	char buf[32];
 	brubeck_ftoa(buf, f);
-	printf("==== output for %f is %s", f, buf);
 	sput_fail_unless(strcmp(str, buf) == 0, str);
 }
 
